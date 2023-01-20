@@ -1,0 +1,322 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "apiMetadata": {
+      "description": "api metadata",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "description": "product display name",
+          "type": "string",
+          "maxLength": 100
+        },
+        "description": {
+          "description": "single sentence product description used in Developer Portal card, Apigee management interface, etc.",
+          "type": "string"
+        },
+        "categoryTaxonomies": {
+          "description": "service taxonomy assignment",
+          "type": "string",
+          "enum": [
+            "Investment Services and Support",
+            "Investment Operations",
+            "Investment Analytics",
+            "Governance and Oversight",
+            "Explore APIs",
+            "Internal Services"
+          ]
+        },
+        "segmentTaxonomies": {
+          "description": "segment taxonomy assignment",
+          "type": "string",
+          "enum": [
+            "Asset Managers",
+            "Asset Owners",
+            "Alternative Asset Managers",
+            "Insurance Companies",
+            "Official Institutions",
+            "Global Markets",
+            "Global Advisors",
+            "Developer"
+          ]
+        },
+        "publish": {
+          "description": "whether to publish product, defaults to true",
+          "type": "boolean",
+          "default": true
+        },
+        "application": {
+          "description": "application metadata",
+          "type": "object",
+          "properties": {
+            "appId": {
+              "description": "parent SAID for publishing application(in AIW)",
+              "type": "string"
+            },
+            "appCode": {
+              "description": "parent AppCode for publishing application(in AIW)",
+              "type": "string"
+            },
+            "atrackProjectId": {
+              "description": "Sponsoring project for publication, may be used to allocate responsibility and cost",
+              "type": "string"
+            },
+            "clarityProjectId": {
+              "description": "Sponsoring project for publication, may be used to allocate responsibility and cost",
+              "type": "string"
+            }
+          }
+        },
+        "businessContacts": {
+          "description": "List of business owners to include in addition to those listed in AIW. Typically these will be the specific team responsible for the API solution embedded in the publishing application.",
+          "type": "array",
+          "items": {
+            "description": "contact data",
+            "type": "object",
+            "properties": {
+              "employeeId": {
+                "description": "employee Id",
+                "type": "string"
+              },
+              "email": {
+                "description": "email",
+                "type": "string",
+                "format": "email"
+              }
+            }
+          }
+        },
+        "technologyContacts": {
+          "description": "List of technology owners to include in addition to those listed in AIW. Typically these will be the specific team responsible for the API solution embedded in the publishing application.",
+          "type": "array",
+          "items": {
+            "description": "contact data",
+            "type": "object",
+            "properties": {
+              "employeeId": {
+                "description": "employee Id",
+                "type": "string"
+              },
+              "email": {
+                "description": "email",
+                "type": "string",
+                "format": "email"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "displayName",
+        "description",
+        "publish"
+      ]
+    },
+    "apiProduct": {
+      "description": "api product data",
+      "type": "object",
+      "properties": {
+        "approvalType": {
+          "description": "approval type, check Apigee API document for more details",
+          "type": "string",
+          "enum": [
+            "auto",
+            "manual"
+          ]
+        },
+        "scopes": {
+          "description": "scopes, check Apigee API document for more details",
+          "type": "array",
+          "items": {
+            "type":"string",
+            "enum": [
+              "read"
+            ]
+          }
+        },
+        "proxies": {
+          "description": "api proxy target, check Apigee API document for more details",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "attributes": {
+          "description": "Part of payload used in Apigee product update API, check Apigee API document for more details.",
+          "type": "object",
+          "properties": {
+            "dev": {
+              "description": "attributes for dev environment",
+              "type": "object"
+            },
+            "uat": {
+              "description": "attributes for uat environment",
+              "type": "object"
+            },
+            "prod": {
+              "description": "attributes for prod environment",
+              "type": "object"
+            }
+          }
+        },
+        "quota": {
+          "description": "quota value, check Apigee API document for more details",
+          "type": "number"
+        },
+        "quotaInterval": {
+          "description": "quota interval, check Apigee API document for more details",
+          "type": "number"
+        },
+        "quotaTimeUnit": {
+          "description": "quota time unit, check Apigee API document for more details",
+          "type": "string",
+          "enum": [
+            "minute",
+            "hour",
+            "day",
+            "month"
+          ]
+        },
+        "environments": {
+          "description": "active environments you choose, check Apigee API document for more details",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "approvalType",
+        "scopes",
+        "proxies",
+        "quota",
+        "quotaInterval",
+        "quotaTimeUnit",
+        "environments"
+      ]
+    },
+    "apiProxy": {
+      "description": "api proxy data",
+      "type": "object",
+      "properties": {
+        "proxyTimeoutSeconds": {
+          "description": "use it to set timeout between Apigee and backend service",
+          "type": "number",
+          "default": 60
+        },
+        "request": {
+          "description": "request configuration data",
+          "type": "object",
+          "properties": {
+            "virusScanPaths": {
+              "description": "Enable virus scanning for a specific form parameter, BASE64 is only supported encoding currently.",
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "sqlInjectionPathExclusions": {
+              "description": "Selectively disable SQL injection scanning for listed paths(wildcards supported).",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "spikeArrestPerSecond": {
+              "description": "use it to protect your API proxy's target backend against severe traffic spikes and denial of service attacks.\n if you set it to 10/s, and traffic comes in faster than the rate, then it will start rejecting requests",
+              "type": "number"
+            },
+            "sizeLimitMB": {
+              "description": "use it to limit the max request size",
+              "type": "number"
+            }
+          }
+        },
+        "response": {
+          "description": "response configuration data",
+          "type": "object",
+          "properties": {
+            "sizeLimitMB": {
+              "description": "use it to limit the max response size",
+              "type": "number"
+            }
+          }
+        },
+        "verify": {
+          "description": "verify data",
+          "type": "object",
+          "properties": {
+            "sourceAddresses": {
+              "description": "source networks allowed to access service, when omitted, the default setting is to allow access from any source address.",
+              "type": "array",
+              "items": {
+                "description": "IP",
+                "type": "string"
+              }
+            },
+            "targetAddresses": {
+              "description": "source networks allowed to access service, when omitted, the default setting is to allow access from any backend target address.",
+              "type": "array",
+              "items": {
+                "description": "IP",
+                "type": "string"
+              }
+            },
+            "clientCertificateSubjects": {
+              "description": "required certificate CN or SNI values",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "serviceCertificate": {
+              "description": "require TLS with minimum protocol, cipher, and trust validation",
+              "type": "boolean"
+            },
+            "requestSignature": {
+              "description": "(potential future solution) require replay protection via X-Timestam and X-Signature",
+              "type": "boolean"
+            },
+            "backend": {
+              "description": "backend data",
+              "type": "object",
+              "properties": {
+                "location": {
+                  "description": "the server vendor which the backend service used",
+                  "type": "string",
+                  "enum": [
+                    "internal",
+                    "azure",
+                    "aws"
+                  ]
+                },
+                "type": {
+                  "description": "the server location where the backend service deployed",
+                  "type": "string",
+                  "enum": [
+                    "cloud-iaas",
+                    "cloud-paas",
+                    "service-mesh",
+                    "k8s",
+                    "azure-function",
+                    "aws-lambda"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "version",
+    "apiMetadata",
+    "apiProduct",
+    "apiProxy"
+  ]
+}
